@@ -94,9 +94,9 @@ $.fn.sortable = function(options) {
       if (items.is(this)) {
         var draggingHeight = dragging.outerHeight(), thisHeight = $(this).outerHeight();
         if (options.forcePlaceholderSize) {
-          placeholder.height(draggingHeight); 
+          placeholder.height(draggingHeight);
         }
-        
+
         // Check if $(this) is bigger than the draggable. If it is, we have to define a dead zone to prevent flickering
         if (thisHeight > draggingHeight){
           // Dead zone?
@@ -110,7 +110,12 @@ $.fn.sortable = function(options) {
         }
 
         dragging.hide();
-        $(this)[placeholder.index() < $(this).index() ? 'after' : 'before'](placeholder);
+
+        // Insert based on position over current target (top half = before, bottom half = after)
+        var y = e.originalEvent.pageY - $(this).offset().top;
+        var bottomHalf = y > $(this).height() * 0.5;
+        $(this)[bottomHalf ? 'after' : 'before'](placeholder);
+
         placeholders.not(placeholder).detach();
       } else if (!placeholders.is(this) && !$(this).children(options.items).length) {
         placeholders.detach();
