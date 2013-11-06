@@ -57,7 +57,7 @@ $.fn.sortable = function(options) {
     }
     items.attr('draggable', 'true').on('dragstart.h5s', function(e) {
       if (options.handle && !isHandle) {
-        return false;
+        return;
       }
       isHandle = false;
       var dt = e.originalEvent.dataTransfer;
@@ -65,6 +65,7 @@ $.fn.sortable = function(options) {
       dt.setData('Text', 'dummy');
       index = (dragging = $(this)).addClass('sortable-dragging').index();
       start_parent = $(this).parent();
+      e.stopPropagation();
     }).on('dragend.h5s', function() {
       if (!dragging) {
         return;
